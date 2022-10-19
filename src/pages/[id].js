@@ -3,7 +3,6 @@ import Head from 'next/head'
 import { useEffect, useState } from "react"
 import { Box, Button, Divider, Flex, Heading, Link, ListItem, Text, UnorderedList, useToast } from "@chakra-ui/react"
 import moment from 'moment'
-import 'moment/locale/pt'
 import parse from 'html-react-parser'
 import Lottie from 'react-lottie-player'
 import 'animate.css';
@@ -60,7 +59,7 @@ export default function Order({ data }) {
             last_update: 'Last Update',
             link: 'Link or username',
             quantity: 'Quantity',
-            initial_quantity: 'Quantity',
+            initial_quantity: 'Initial quantity',
             refill_button: 'Request Replacement',
             refill_sucess_message: 'Refill requested successfully!',
             status_new_order: 'Order<br/>Received',
@@ -128,7 +127,7 @@ export default function Order({ data }) {
                 setProgressBarWidth(0)
             }
             else if(data[0]?.status == 'processing') {
-                var percent = 42
+                var percent = 36
 
                 for (let index = 0; index < percent; index++) {
                     setTimeout(() => {
@@ -168,12 +167,12 @@ export default function Order({ data }) {
                             <UnorderedList w="full" listStyleType="none" ml={0}>
                                 <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
                                     <Text>{terms[locale].order_date}:</Text>
-                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.created).format('LLL')}</Text>
+                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.created).locale(locale).format('LLL')}</Text>
                                 </ListItem>
                                 <Divider />
                                 <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
                                     <Text>{terms[locale].last_update}:</Text>
-                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.changed).format('LLL')}</Text>
+                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.changed).locale(locale).format('LLL')}</Text>
                                 </ListItem>
                                 <Divider />
                                 <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
@@ -229,7 +228,7 @@ export default function Order({ data }) {
                                 </Flex>
 
                                 <Flex flexDir="column" justifyContent="center" alignItems="center">
-                                    {progressBarWidth > 40 &&
+                                    {progressBarWidth > 34 &&
                                         <>
                                             <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
                                                 <Image src={PendingIcon} width="28px" height="28px" />
@@ -239,7 +238,7 @@ export default function Order({ data }) {
                                             </Text>
                                         </>
                                     }
-                                    {progressBarWidth < 40 &&
+                                    {progressBarWidth < 34 &&
                                         <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
                                             <Lottie
                                                 loop
