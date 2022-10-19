@@ -154,7 +154,6 @@ export default function Order({ data }) {
                 <title>{terms[locale].page_title}</title>
             </Head>
         
-            {console.log(progressBarWidth)}
             <Flex w="full" h="full" bg="gray.200" alignItems="center" justifyContent="center" p={4} flexDir="column">
                 <Flex w="100%" justifyContent="flex-end" position="fixed" top={0} pt={4} pr={4}>
                     <Menu locale={locale} />
