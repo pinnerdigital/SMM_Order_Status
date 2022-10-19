@@ -118,7 +118,7 @@ export default function Order({ data }) {
     useEffect(() => {
         setTimeout(() => {
             if (data[0]?.status == 'completed' || data[0]?.status == 'canceled' || data[0]?.status == 'partial' || data[0]?.status == 'refunded') {
-                var percent = 95
+                var percent = 90
 
                 for (let index = 0; index < percent; index++) {
                     setTimeout(() => {
@@ -221,7 +221,7 @@ export default function Order({ data }) {
                                 />
 
                                 <Flex flexDir="column" justifyContent="center" alignItems="center" className="animate__animated animate__bounceIn">
-                                    <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
+                                    <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" border="4px solid #fff" zIndex="999">
                                         <Image src={NewOrderIcon} width="28px" height="28px" />
                                     </Flex>
                                     <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
@@ -232,7 +232,7 @@ export default function Order({ data }) {
                                 <Flex flexDir="column" justifyContent="center" alignItems="center">
                                     {progressBarWidth > 34 &&
                                         <>
-                                            <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
+                                            <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" border="4px solid #fff" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
                                                 <Image src={PendingIcon} width="28px" height="28px" />
                                             </Flex>
                                             <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
@@ -241,7 +241,7 @@ export default function Order({ data }) {
                                         </>
                                     }
                                     {progressBarWidth < 34 &&
-                                        <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
+                                        <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" border="4px solid #fff" zIndex="999">
                                             <Lottie
                                                 loop
                                                 animationData={waiting}
@@ -255,7 +255,7 @@ export default function Order({ data }) {
                                 <Flex flexDir="column" justifyContent="center" alignItems="center">
                                     {progressBarWidth > 60 &&
                                         <>
-                                            <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
+                                            <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" border="4px solid #fff" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
                                                 <Image src={ProcessingIcon} width="28px" height="28px" />
                                             </Flex>
                                             <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
@@ -264,7 +264,7 @@ export default function Order({ data }) {
                                         </>
                                     }
                                     {progressBarWidth < 60 &&
-                                        <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
+                                        <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" border="4px solid #fff" zIndex="999">
                                             <Lottie
                                                 loop
                                                 animationData={waiting}
@@ -276,9 +276,9 @@ export default function Order({ data }) {
                                 </Flex>
 
                                 <Flex flexDir="column" justifyContent="center" alignItems="center">
-                                    {progressBarWidth > 93 &&
+                                    {progressBarWidth > 87 &&
                                         <>
-                                            <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg={progressBarWidth > 93 ? 'red.600' : 'red'} zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
+                                            <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg={progressBarWidth > 87 ? 'red.600' : 'red'} border="4px solid #fff" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
                                                 {data[0]?.status == 'canceled' &&
                                                     <Image className="animate__animated animate__pulse animate__infinite" src={CanceledIcon} width="28px" height="28px" />
                                                 }
@@ -308,8 +308,8 @@ export default function Order({ data }) {
                                             </Text>
                                         </>
                                     }
-                                    {progressBarWidth < 93 &&
-                                        <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg={progressBarWidth > 93 ? 'red.600' : 'red'} zIndex="999">
+                                    {progressBarWidth < 87 &&
+                                        <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg={progressBarWidth > 87 ? 'red.600' : 'red'} zIndex="999">
                                             <Lottie
                                                 loop
                                                 animationData={waiting}
