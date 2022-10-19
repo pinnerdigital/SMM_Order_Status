@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { Box, Button, Flex, Heading, Link, ListItem, Text, UnorderedList, useToast } from "@chakra-ui/react"
+import Head from 'next/head'
+import { useEffect, useState } from "react"
+import { Box, Button, Divider, Flex, Heading, Link, ListItem, Text, UnorderedList, useToast } from "@chakra-ui/react"
 import moment from 'moment'
 import 'moment/locale/pt'
 import parse from 'html-react-parser'
+import Lottie from 'react-lottie-player'
 import 'animate.css';
 
 import { BsCheck } from 'react-icons/bs'
@@ -19,6 +21,8 @@ import RefundedIcon from "../assets/Refunded.png"
 import CanceledIcon from "../assets/Canceled.png"
 import PartialIcon from "../assets/Partial.png"
 
+import waiting from '../assets/waiting.json'
+
 import config from "../config"
 import Image from "next/image"
 
@@ -30,6 +34,7 @@ export default function Order({ data }) {
 
     const terms = {
         'pt': {
+            page_title: 'Status do Pedido',
             order_id: 'Id do pedido',
             order_date: 'Data do pedido',
             last_update: 'Última atualização',
@@ -49,6 +54,7 @@ export default function Order({ data }) {
 
         },
         'en': {
+            page_title: 'Order Status',
             order_id: 'Order ID',
             order_date: 'Order date',
             last_update: 'Last Update',
@@ -67,6 +73,7 @@ export default function Order({ data }) {
             status_refunded: 'Refunded order<br/>contact seller',
         },
         'es': {
+            page_title: 'Estado del pedido',
             order_id: 'Solicitar ID',
             order_date: 'Fecha de solicitud',
             last_update: 'Última actualización',
@@ -109,8 +116,27 @@ export default function Order({ data }) {
 
     useEffect(() => {
         setTimeout(() => {
-            if (data[0]?.status == 'completed') {
-                var percent = 98
+            if (data[0]?.status == 'completed' || data[0]?.status == 'canceled' || data[0]?.status == 'partial' || data[0]?.status == 'refunded') {
+                var percent = 95
+
+                for (let index = 0; index < percent; index++) {
+                    setTimeout(() => {
+                        setProgressBarWidth(index)
+                    }, index * 10)
+                }
+            }else if(data[0]?.status == 'pending') {
+                setProgressBarWidth(0)
+            }
+            else if(data[0]?.status == 'processing') {
+                var percent = 41
+
+                for (let index = 0; index < percent; index++) {
+                    setTimeout(() => {
+                        setProgressBarWidth(index)
+                    }, index * 10)
+                }
+            }else if(data[0]?.status == 'inprogress') {
+                var percent = 71
 
                 for (let index = 0; index < percent; index++) {
                     setTimeout(() => {
@@ -121,127 +147,181 @@ export default function Order({ data }) {
         }, 500)
     }, [])
     return (
-        <Flex w="full" h="full" bg="gray.200" alignItems="center" justifyContent="center" p={4} flexDir="column">
-            <Flex w="100%" justifyContent="flex-end" position="fixed" top={0} pt={4} pr={4}>
-                <Menu locale={locale} />
-            </Flex>
-            <Flex w="full" maxW="800px" p={6} pb={12} borderRadius={4} border="1px solid #33333388" bg="white" boxShadow="md">
-                <Flex w="full" justifyContent="flex-start" flexDir="column">
-                    <Flex alignItems="center" fontSize={18} textTransform="uppercase">
-                        <Heading fontSize={18}>{terms[locale].order_id}:</Heading>
-                        <Text color="red" ml={2} fontWeight="bold" mt={1}>#{data[0]?.id}</Text>
-                    </Flex>
-                    <Flex mt={2} w="full">
-                        <UnorderedList w="full" listStyleType="none" ml={0}>
-                            <ListItem mt={2} display="flex" flexDir="row" alignItems="center">
-                                <Text>{terms[locale].order_date}:</Text>
-                                <Text ml={2} fontWeight="bold">{moment(data[0]?.created).format('LLL')}</Text>
-                            </ListItem>
-                            <ListItem mt={2} display="flex" flexDir="row" alignItems="center">
-                                <Text>{terms[locale].last_update}:</Text>
-                                <Text ml={2} fontWeight="bold">{moment(data[0]?.changed).format('LLL')}</Text>
-                            </ListItem>
-                            <ListItem mt={2} display="flex" flexDir="row" alignItems="center">
-                                <Text>{terms[locale].link}:</Text>
-                                <Text ml={2} fontWeight="bold" color="red" wordBreak="break-word">
-                                    <Link href={data[0]?.link}>{data[0]?.link}</Link>
-                                </Text>
-                            </ListItem>
-                            <ListItem mt={2} display="flex" flexDir="row" alignItems="center">
-                                <Text>{terms[locale].quantity}:</Text>
-                                <Text ml={2} fontWeight="bold">{data[0]?.quantity}</Text>
-                            </ListItem>
-                            <ListItem mt={2} display="flex" flexDir="row" alignItems="center">
-                                <Text>{terms[locale].initial_quantity}:</Text>
-                                <Text ml={2} fontWeight="bold">{data[0]?.start_counter}</Text>
-                            </ListItem>
-                            {data[0]?.refill == '1' &&
-                                <ListItem mt={2} display="flex" flexDir="row" alignItems="center">
-                                    <Button isLoading={isLoading} onClick={() => handleRefill(data[0]?.api_provider_id, data[0].api_order_id)} colorScheme="red" rightIcon={<AiOutlineReload />}>{terms[locale].refill_button}</Button>
-                                </ListItem>
-                            }
-                        </UnorderedList>
-                    </Flex>
-
-                    <Flex w="full" mt={2} flexDir="column">
-                        <Flex>
-                            <Heading fontSize={22}>Status:</Heading>
+        <>
+            <Head>
+                <link rel="icon" type="image/png" href="/favicon.png"/>
+                <title>{terms[locale].page_title}</title>
+            </Head>
+            <Flex w="full" h="full" bg="gray.200" alignItems="center" justifyContent="center" p={4} flexDir="column">
+                <Flex w="100%" justifyContent="flex-end" position="fixed" top={0} pt={4} pr={4}>
+                    <Menu locale={locale} />
+                </Flex>
+                <Flex w="full" maxW="800px" p={6} pb={12} borderRadius={4} border="1px solid #33333388" bg="white" boxShadow="md">
+                    <Flex w="full" justifyContent="flex-start" flexDir="column">
+                        <Flex alignItems="center" fontSize={18} textTransform="uppercase">
+                            <Heading fontSize={18}>{terms[locale].order_id}:</Heading>
+                            <Text color="red" ml={2} fontWeight="bold" mt={1}>#{data[0]?.id}</Text>
                         </Flex>
-                        <Flex w="full" justifyContent="space-between" mt={2} position="relative">
-                            <Flex
-                                h={2}
-                                position="absolute"
-                                bg="red"
-                                left={0}
-                                top="50%"
-                                transform="translate(0px, -5px)"
-                                style={{
-                                    width: `${progressBarWidth}%`
-                                }}
-                            />
+                        <Flex mt={2} w="full">
+                            <UnorderedList w="full" listStyleType="none" ml={0}>
+                                <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
+                                    <Text>{terms[locale].order_date}:</Text>
+                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.created).format('LLL')}</Text>
+                                </ListItem>
+                                <Divider />
+                                <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
+                                    <Text>{terms[locale].last_update}:</Text>
+                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.changed).format('LLL')}</Text>
+                                </ListItem>
+                                <Divider />
+                                <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
+                                    <Text>{terms[locale].link}:</Text>
+                                    <Text ml={2} fontWeight="bold" color="red" wordBreak="break-word" textAlign="right">
+                                        <Link href={data[0]?.link}>{data[0]?.link}</Link>
+                                    </Text>
+                                </ListItem>
+                                <Divider />
+                                <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
+                                    <Text>{terms[locale].quantity}:</Text>
+                                    <Text ml={2} fontWeight="bold" textAlign="right">{data[0]?.quantity}</Text>
+                                </ListItem>
+                                <Divider />
+                                <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
+                                    <Text>{terms[locale].initial_quantity}:</Text>
+                                    <Text ml={2} fontWeight="bold" textAlign="right">{data[0]?.start_counter}</Text>
+                                </ListItem>
+                                <Divider />
+                                {data[0]?.refill == '1' &&
+                                    <ListItem mt={2} display="flex" flexDir="row" alignItems="center">
+                                        <Button isLoading={isLoading} onClick={() => handleRefill(data[0]?.api_provider_id, data[0].api_order_id)} colorScheme="red" rightIcon={<AiOutlineReload />}>{terms[locale].refill_button}</Button>
+                                    </ListItem>
+                                }
+                            </UnorderedList>
+                        </Flex>
 
-                            <Flex flexDir="column" justifyContent="center" alignItems="center" className="animate__animated animate__bounceIn">
-                                <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
-                                    <Image src={NewOrderIcon} width="28px" height="28px" />
-                                </Flex>
-                                <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
-                                    {parse(String(terms[locale]?.status_new_order))}
-                                </Text>
+                        <Flex w="full" mt={2} flexDir="column">
+                            <Flex>
+                                <Heading fontSize={22}>Status:</Heading>
                             </Flex>
+                            <Flex className="container_status_progress" w="full" justifyContent="space-between" mt={2} position="relative" pr="32px">
+                                <Flex
+                                    h={2}
+                                    position="absolute"
+                                    bg="red"
+                                    left={0}
+                                    top="50%"
+                                    transform="translate(0px, -5px)"
+                                    borderRadius="md"
+                                    style={{
+                                        width: `${progressBarWidth}%`
+                                    }}
+                                />
 
-                            <Flex flexDir="column" justifyContent="center" alignItems="center" opacity={0} className={progressBarWidth > 40 ? 'animate__animated animate__bounceIn' : ''}>
-                                <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
-                                    <Image src={PendingIcon} width="28px" height="28px" />
+                                <Flex flexDir="column" justifyContent="center" alignItems="center" className="animate__animated animate__bounceIn">
+                                    <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
+                                        <Image src={NewOrderIcon} width="28px" height="28px" />
+                                    </Flex>
+                                    <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
+                                        {parse(String(terms[locale]?.status_new_order))}
+                                    </Text>
                                 </Flex>
-                                <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
-                                    {parse(String(terms[locale]?.status_pending))}
-                                </Text>
-                            </Flex>
 
-                            <Flex flexDir="column" justifyContent="center" alignItems="center" opacity={0} className={progressBarWidth > 70 ? 'animate__animated animate__bounceIn' : ''}>
-                                <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
-                                    <Image src={ProcessingIcon} width="28px" height="28px" />
+                                <Flex flexDir="column" justifyContent="center" alignItems="center">
+                                    {progressBarWidth > 40 &&
+                                        <>
+                                            <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
+                                                <Image src={PendingIcon} width="28px" height="28px" />
+                                            </Flex>
+                                            <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
+                                                {parse(String(terms[locale]?.status_pending))}
+                                            </Text>
+                                        </>
+                                    }
+                                    {progressBarWidth < 40 &&
+                                        <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
+                                            <Lottie
+                                                loop
+                                                animationData={waiting}
+                                                play
+                                                style={{ width: 52, height: 52 }}
+                                            />
+                                        </Flex>
+                                    }
                                 </Flex>
-                                <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
-                                    {parse(String(terms[locale]?.status_processing))}
-                                </Text>
-                            </Flex>
 
-                            <Flex flexDir="column" justifyContent="center" alignItems="center" opacity={0} className={progressBarWidth > 95 ? 'animate__animated animate__bounceIn' : ''}>
-                                <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg={progressBarWidth > 95 ? 'red.600' : 'red'} zIndex="999">
-                                    {data[0]?.status == 'canceled' &&
-                                        <Image src={CanceledIcon} width="28px" height="28px" />
+                                <Flex flexDir="column" justifyContent="center" alignItems="center">
+                                    {progressBarWidth > 70 &&
+                                        <>
+                                            <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
+                                                <Image src={ProcessingIcon} width="28px" height="28px" />
+                                            </Flex>
+                                            <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
+                                                {parse(String(terms[locale]?.status_processing))}
+                                            </Text>
+                                        </>
                                     }
-                                    {data[0]?.status == 'refunded' &&
-                                        <Image src={RefundedIcon} width="28px" height="28px" />
-                                    }
-                                    {data[0]?.status == 'partial' &&
-                                        <Image src={PartialIcon} width="28px" height="28px" />
-                                    }
-                                    {data[0]?.status == 'completed' &&
-                                        <Image src={CompletedIcon} width="28px" height="28px" />
+                                    {progressBarWidth < 70 &&
+                                        <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
+                                            <Lottie
+                                                loop
+                                                animationData={waiting}
+                                                play
+                                                style={{ width: 52, height: 52 }}
+                                            />
+                                        </Flex>
                                     }
                                 </Flex>
-                                <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
-                                    {data[0]?.status == 'canceled' &&
-                                        parse(String(terms[locale]?.status_canceled))
+
+                                <Flex flexDir="column" justifyContent="center" alignItems="center">
+                                    {progressBarWidth > 93 &&
+                                        <>
+                                            <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg={progressBarWidth > 93 ? 'red.600' : 'red'} zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
+                                                {data[0]?.status == 'canceled' &&
+                                                    <Image className="animate__animated animate__pulse animate__infinite" src={CanceledIcon} width="28px" height="28px" />
+                                                }
+                                                {data[0]?.status == 'refunded' &&
+                                                    <Image className="animate__animated animate__pulse animate__infinite" src={RefundedIcon} width="28px" height="28px" />
+                                                }
+                                                {data[0]?.status == 'partial' &&
+                                                    <Image className="animate__animated animate__pulse animate__infinite" src={PartialIcon} width="28px" height="28px" />
+                                                }
+                                                {data[0]?.status == 'completed' &&
+                                                    <Image className="animate__animated animate__pulse animate__infinite" src={CompletedIcon} width="28px" height="28px" />
+                                                }
+                                            </Flex>
+                                            <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
+                                                {data[0]?.status == 'canceled' &&
+                                                    parse(String(terms[locale]?.status_canceled))
+                                                }
+                                                {data[0]?.status == 'refunded' &&
+                                                    parse(String(terms[locale]?.status_refunded))
+                                                }
+                                                {data[0]?.status == 'partial' &&
+                                                    parse(String(terms[locale]?.status_partial))
+                                                }
+                                                {data[0]?.status == 'completed' &&
+                                                    parse(String(terms[locale]?.status_completed))
+                                                }
+                                            </Text>
+                                        </>
                                     }
-                                    {data[0]?.status == 'refunded' &&
-                                        parse(String(terms[locale]?.status_refunded))
+                                    {progressBarWidth < 93 &&
+                                        <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg={progressBarWidth > 93 ? 'red.600' : 'red'} zIndex="999">
+                                            <Lottie
+                                                loop
+                                                animationData={waiting}
+                                                play
+                                                style={{ width: 52, height: 52 }}
+                                            />
+                                        </Flex>
                                     }
-                                    {data[0]?.status == 'partial' &&
-                                        parse(String(terms[locale]?.status_partial))
-                                    }
-                                    {data[0]?.status == 'completed' &&
-                                        parse(String(terms[locale]?.status_completed))
-                                    }
-                                </Text>
+                                </Flex>
                             </Flex>
                         </Flex>
                     </Flex>
                 </Flex>
             </Flex>
-        </Flex>
+        </>
     )
 }
 

@@ -21,6 +21,22 @@ a {
   height: 100%;
 }
 
+.animate__delay-02s {
+  animation-delay: 0.2s;
+}
+
+.animate__delay-04s {
+  animation-delay: 0.4s;
+}
+
+.animate__delay-06s {
+  animation-delay: 0.6s;
+}
+
+.animate__delay-08s {
+  animation-delay: 0.8s;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -36,11 +52,15 @@ a {
     font-size: 10px!important;
     line-height: 10px!important;
   }
+
+  .container_status_progress {
+    padding-right: 0;
+  }
 }
 
 @media only screen and (max-width: 520px) {
   .status_text {
-    width: 100px !important;
+    width: 90px !important;
   }
 }
 
