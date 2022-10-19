@@ -3,6 +3,8 @@ import Head from 'next/head'
 import { useEffect, useState } from "react"
 import { Box, Button, Divider, Flex, Heading, Link, ListItem, Text, UnorderedList, useToast } from "@chakra-ui/react"
 import moment from 'moment'
+import 'moment/locale/pt'
+import 'moment/locale/es'
 import parse from 'html-react-parser'
 import Lottie from 'react-lottie-player'
 import 'animate.css';
