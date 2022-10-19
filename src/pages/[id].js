@@ -105,12 +105,16 @@ export default function Order({ data }) {
                 title: 'Error',
                 description: json.data.error,
                 status: 'error',
+                duration: 5000,
+                isClosable: true,
             })
         }else{
             return toast({
                 title: 'Sucess',
                 description: terms[locale].refill_sucess_message,
                 status: 'success',
+                duration: 5000,
+                isClosable: true,
             })
         }
     }
