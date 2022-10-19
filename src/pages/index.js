@@ -48,7 +48,7 @@ export default function Index() {
               />
           </Flex>
         </Box>
-        <Heading as="h2" size="xl" mt={6} mb={2}>
+        <Heading as="h2" size="xl" mt={8} mb={2}>
           {terms[locale].heading}
         </Heading>
         <Text color={'gray.500'}>

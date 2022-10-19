@@ -12,15 +12,19 @@
     "@chakra-ui/react": "^2.3.6",
     "@emotion/react": "11",
     "@emotion/styled": "11",
+    "animate.css": "^4.1.1",
     "flag-icons": "^6.6.6",
     "framer-motion": "6",
+    "html-react-parser": "^3.0.4",
     "knex": "^2.3.0",
+    "moment": "^2.29.4",
     "mysql2": "^2.3.3",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.6.0",
-    "react-lottie-player": "^1.4.3"
+    "react-lottie-player": "^1.4.3",
+    "react-stepz": "^1.0.2"
   },
   "devDependencies": {
     "eslint": "8.25.0",
