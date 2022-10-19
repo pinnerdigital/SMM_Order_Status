@@ -128,7 +128,7 @@ export default function Order({ data }) {
                 setProgressBarWidth(0)
             }
             else if(data[0]?.status == 'processing') {
-                var percent = 41
+                var percent = 42
 
                 for (let index = 0; index < percent; index++) {
                     setTimeout(() => {
@@ -136,7 +136,7 @@ export default function Order({ data }) {
                     }, index * 10)
                 }
             }else if(data[0]?.status == 'inprogress') {
-                var percent = 71
+                var percent = 62
 
                 for (let index = 0; index < percent; index++) {
                     setTimeout(() => {
@@ -145,6 +145,7 @@ export default function Order({ data }) {
                 }
             }
         }, 500)
+
     }, [])
     return (
         <>
@@ -152,6 +153,8 @@ export default function Order({ data }) {
                 <link rel="icon" type="image/png" href="/favicon.png"/>
                 <title>{terms[locale].page_title}</title>
             </Head>
+        
+            {console.log(progressBarWidth)}
             <Flex w="full" h="full" bg="gray.200" alignItems="center" justifyContent="center" p={4} flexDir="column">
                 <Flex w="100%" justifyContent="flex-end" position="fixed" top={0} pt={4} pr={4}>
                     <Menu locale={locale} />
@@ -250,7 +253,7 @@ export default function Order({ data }) {
                                 </Flex>
 
                                 <Flex flexDir="column" justifyContent="center" alignItems="center">
-                                    {progressBarWidth > 70 &&
+                                    {progressBarWidth > 60 &&
                                         <>
                                             <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
                                                 <Image src={ProcessingIcon} width="28px" height="28px" />
@@ -260,7 +263,7 @@ export default function Order({ data }) {
                                             </Text>
                                         </>
                                     }
-                                    {progressBarWidth < 70 &&
+                                    {progressBarWidth < 60 &&
                                         <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" zIndex="999">
                                             <Lottie
                                                 loop
