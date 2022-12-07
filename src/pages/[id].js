@@ -120,6 +120,7 @@ export default function Order({ data }) {
     }
 
     useEffect(() => {
+        console.log(data)
         setTimeout(() => {
             if (data[0]?.status == 'completed' || data[0]?.status == 'canceled' || data[0]?.status == 'partial' || data[0]?.status == 'refunded') {
                 var percent = 90
