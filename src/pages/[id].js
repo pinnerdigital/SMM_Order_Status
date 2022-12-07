@@ -177,12 +177,12 @@ export default function Order({ data }) {
                             <UnorderedList w="full" listStyleType="none" ml={0}>
                                 <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
                                     <Text>{terms[locale].order_date}:</Text>
-                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.created).locale(locale).format('LLL')}</Text>
+                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.created).utcOffset(-4).locale('pt').format('LLL')}</Text>
                                 </ListItem>
                                 <Divider />
                                 <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
                                     <Text>{terms[locale].last_update}:</Text>
-                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.changed).locale(locale).format('LLL')}</Text>
+                                    <Text ml={2} fontWeight="bold" textAlign="right">{moment(data[0]?.changed).utcOffset(-4).locale('pt').format('LLL')}</Text>
                                 </ListItem>
                                 <Divider />
                                 <ListItem mt={2} w="100%" justifyContent="space-between" display="flex" flexDir="row" alignItems="center">
@@ -349,10 +349,10 @@ export const getServerSideProps = async ({ params }) => {
     }
     try {
         const order = await fetch(`${config.baseUrl}/api/order?ids=${id}`).then(r => r.json())
-        if(order.data.length > 0) {
+        if (order.data.length > 0) {
             return { props: { ok: true, data: order.data } }
-        }else{
-           return {
+        } else {
+            return {
                 redirect: {
                     permanent: false,
                     destination: '/'
