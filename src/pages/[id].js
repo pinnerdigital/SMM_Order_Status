@@ -349,7 +349,17 @@ export const getServerSideProps = async ({ params }) => {
     }
     try {
         const order = await fetch(`${config.baseUrl}/api/order?ids=${id}`).then(r => r.json())
-        return { props: { ok: true, data: order.data } }
+        if(order.data.length > 0) {
+            return { props: { ok: true, data: order.data } }
+        }else{
+           return {
+                redirect: {
+                    permanent: false,
+                    destination: '/'
+                }
+            }
+        }
+
     } catch (error) {
         return {
             redirect: {
