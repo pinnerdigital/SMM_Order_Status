@@ -232,7 +232,7 @@ export default function Order({ data }) {
                                     <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" border="4px solid #fff" zIndex="999">
                                         <Image src={NewOrderIcon} width="28px" height="28px" alt="" />
                                     </Flex>
-                                    <Flex className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
+                                    <Flex className="status_text" justifyContent="center" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
                                         <Text>{data[0].status == 'awaiting' ? parse(String(terms[locale]?.awaiting_payment)) : parse(String(terms[locale]?.status_new_order))}</Text>
                                     </Flex>
                                 </Flex>
