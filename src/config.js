@@ -1,3 +1,3 @@
 module.exports = {
-    baseUrl: 'https://smm-status.vercel.app'
+    baseUrl: 'https://foxprovider-store.vercel.app/'
 }

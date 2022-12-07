@@ -45,6 +45,7 @@ export default function Order({ data }) {
             refill_button: 'Solicitar Reposição',
             refill_sucess_message: 'Refill solicitado com sucesso!',
             status_new_order: 'Pedido<br/>Recebido',
+            awaiting_payment: 'Aguardando Pagamento',
             status_pending: 'Estamos organizando<br/>para iniciar',
             status_processing: 'Estamos processando<br/>o seu pedido',
             status_in_progress: 'Seu pedido está <br/>em progresso',
@@ -65,6 +66,7 @@ export default function Order({ data }) {
             refill_button: 'Request Replacement',
             refill_sucess_message: 'Refill requested successfully!',
             status_new_order: 'Order<br/>Received',
+            awaiting_payment: 'Awaiting Payment',
             status_pending: 'We are organizing<br/>to start',
             status_processing: 'We are processing<br/>your order',
             status_in_progress: 'Your order is <br/>in progress',
@@ -84,6 +86,7 @@ export default function Order({ data }) {
             refill_button: 'Solicitar reemplazo',
             refill_sucess_message: '¡Recarga solicitada con éxito!',
             status_new_order: 'Pedido<br/>Recebido',
+            awaiting_payment: 'Esperando el pago',
             status_pending: 'Nos estamos organizando<br/>para empezar',
             status_processing: 'Estamos procesando<br/>su solicitud',
             status_in_progress: 'Su pedido está <br/>en proceso',
@@ -100,7 +103,7 @@ export default function Order({ data }) {
         const json = await response.json();
 
         setIsLoading(false)
-        if(json.data.error) {
+        if (json.data.error) {
             return toast({
                 title: 'Error',
                 description: json.data.error,
@@ -108,7 +111,7 @@ export default function Order({ data }) {
                 duration: 5000,
                 isClosable: true,
             })
-        }else{
+        } else {
             return toast({
                 title: 'Sucess',
                 description: terms[locale].refill_sucess_message,
@@ -130,10 +133,10 @@ export default function Order({ data }) {
                         setProgressBarWidth(index)
                     }, index * 10)
                 }
-            }else if(data[0]?.status == 'pending') {
+            } else if (data[0]?.status == 'pending') {
                 setProgressBarWidth(0)
             }
-            else if(data[0]?.status == 'processing') {
+            else if (data[0]?.status == 'processing') {
                 var percent = 36
 
                 for (let index = 0; index < percent; index++) {
@@ -141,7 +144,7 @@ export default function Order({ data }) {
                         setProgressBarWidth(index)
                     }, index * 10)
                 }
-            }else if(data[0]?.status == 'inprogress') {
+            } else if (data[0]?.status == 'inprogress') {
                 var percent = 62
 
                 for (let index = 0; index < percent; index++) {
@@ -156,10 +159,10 @@ export default function Order({ data }) {
     return (
         <>
             <Head>
-                <link rel="icon" type="image/png" href="/favicon.png"/>
+                <link rel="icon" type="image/png" href="/favicon.png" />
                 <title>{terms[locale].page_title}</title>
             </Head>
-        
+
             <Flex w="full" h="full" bg="gray.200" alignItems="center" justifyContent="center" p={4} flexDir="column">
                 <Flex w="100%" justifyContent="flex-end" position="fixed" top={0} pt={4} pr={4}>
                     <Menu locale={locale} />
@@ -227,18 +230,18 @@ export default function Order({ data }) {
 
                                 <Flex flexDir="column" justifyContent="center" alignItems="center" className="animate__animated animate__bounceIn">
                                     <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" border="4px solid #fff" zIndex="999">
-                                        <Image src={NewOrderIcon} width="28px" height="28px" />
+                                        <Image src={NewOrderIcon} width="28px" height="28px" alt="" />
                                     </Flex>
-                                    <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
-                                        {parse(String(terms[locale]?.status_new_order))}
-                                    </Text>
+                                    <Flex className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
+                                        <Text>{data[0].status == 'awaiting' ? parse(String(terms[locale]?.awaiting_payment)) : parse(String(terms[locale]?.status_new_order))}</Text>
+                                    </Flex>
                                 </Flex>
 
                                 <Flex flexDir="column" justifyContent="center" alignItems="center">
                                     {progressBarWidth > 34 &&
                                         <>
                                             <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" border="4px solid #fff" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
-                                                <Image src={PendingIcon} width="28px" height="28px" />
+                                                <Image src={PendingIcon} width="28px" height="28px" alt="" />
                                             </Flex>
                                             <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
                                                 {parse(String(terms[locale]?.status_pending))}
@@ -261,7 +264,7 @@ export default function Order({ data }) {
                                     {progressBarWidth > 60 &&
                                         <>
                                             <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg="red" border="4px solid #fff" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
-                                                <Image src={ProcessingIcon} width="28px" height="28px" />
+                                                <Image src={ProcessingIcon} width="28px" height="28px" alt="" />
                                             </Flex>
                                             <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
                                                 {parse(String(terms[locale]?.status_processing))}
@@ -285,16 +288,16 @@ export default function Order({ data }) {
                                         <>
                                             <Flex justifyContent="center" alignItems="center" borderRadius="full" w={14} h={14} bg={progressBarWidth > 87 ? 'red.600' : 'red'} border="4px solid #fff" zIndex="999" opacity={0} className="animate__animated animate__bounceIn">
                                                 {data[0]?.status == 'canceled' &&
-                                                    <Image className="animate__animated animate__pulse animate__infinite" src={CanceledIcon} width="28px" height="28px" />
+                                                    <Image className="animate__animated animate__pulse animate__infinite" src={CanceledIcon} width="28px" height="28px" alt="" />
                                                 }
                                                 {data[0]?.status == 'refunded' &&
-                                                    <Image className="animate__animated animate__pulse animate__infinite" src={RefundedIcon} width="28px" height="28px" />
+                                                    <Image className="animate__animated animate__pulse animate__infinite" src={RefundedIcon} width="28px" height="28px" alt="" />
                                                 }
                                                 {data[0]?.status == 'partial' &&
-                                                    <Image className="animate__animated animate__pulse animate__infinite" src={PartialIcon} width="28px" height="28px" />
+                                                    <Image className="animate__animated animate__pulse animate__infinite" src={PartialIcon} width="28px" height="28px" alt="" />
                                                 }
                                                 {data[0]?.status == 'completed' &&
-                                                    <Image className="animate__animated animate__pulse animate__infinite" src={CompletedIcon} width="28px" height="28px" />
+                                                    <Image className="animate__animated animate__pulse animate__infinite" src={CompletedIcon} width="28px" height="28px" alt="" />
                                                 }
                                             </Flex>
                                             <Text className="status_text" position="absolute" bottom="-32px" w="160px" fontSize="14px" lineHeight="14px" textAlign="center">
